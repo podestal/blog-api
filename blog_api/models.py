@@ -10,7 +10,7 @@ class Topic(models.Model):
 
 class Author(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    job_title = models.CharField(max_length=255)
+    job_title = models.CharField(max_length=255, blank=True)
     member_since = models.DateTimeField(auto_now=True)
 
     def __str__(self):
