@@ -1,27 +1,53 @@
 from rest_framework import serializers
 from . import models
 
-class PostSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Post
-        fields = '__all__'
-
 class TopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Topic
-        fields = '__all__'
-
-class SectionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Section
-        fields = '__all__'
+        fields = ['id', 'created_at', 'title']
 
 class BodySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Body
-        fields = '__all__'
+        fields = ['id', 'image', 'code', 'text', 'section']
+
+class CreateBodySeralizer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Body
+        fields = ['image', 'code', 'text']
+    
+    def save(self, **kwargs):
+        section_id = self.context['section_id']
+        return models.Body.objects.create(section_id = section_id, **self.validated_data)
+
+class SectionSerializer(serializers.ModelSerializer):
+
+    bodies = BodySerializer(many=True)
+
+    class Meta:
+        model = models.Section
+        fields = ['id', 'title', 'post', 'bodies']
+
+class CreateSectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Section
+        fields = ['title']
+
+class PostSerializer(serializers.ModelSerializer):
+
+    sections = SectionSerializer(many=True)
+
+    class Meta:
+        model = models.Post
+        fields = ['id', 'created_at', 'title', 'status', 'author', 'topic', 'sections']
+
+    def save(self, **kwargs):
+        post_id = self.context['post_id']
+        return models.Section.objects.create(post_id = post_id, **self.validated_data)
+
+
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Author
-        fields = '__all__'
+        fields = ['id', 'job_title', 'member_since', 'user']

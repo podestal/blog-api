@@ -4,7 +4,7 @@ from . import views
 
 router = routers.DefaultRouter()
 
-router.register('posts', views.PostViewSet)
+router.register('posts', views.PostViewSet, basename='posts')
 router.register('topics', views.TopicViewSet)
 router.register('authors', views.AuthorViewSet)
 

@@ -12,12 +12,30 @@ class TopicViewSet(ModelViewSet):
     serializer_class = serializers.TopicSerializer
 
 class SectionViewSet(ModelViewSet):
-    queryset = models.Section.objects.all()
-    serializer_class = serializers.SectionSerializer
+
+    def get_queryset(self):
+        return models.Section.objects.filter(post_id = self.kwargs['posts_id'])
+
+    def get_serializer_context(self):
+        return {"post_id": self.kwargs['posts_pk']}
+    
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return serializers.CreateSectionSerializer
+        return serializers.SectionSerializer
 
 class BodyViewSet(ModelViewSet):
-    queryset = models.Body.objects.all()
-    serializer_class = serializers.BodySerializer
+
+    def get_queryset(self):
+        return models.Body.objects.filter(section_id = self.kwargs['sections_pk'])
+
+    def get_serializer_context(self):
+        return {"section_id": self.kwargs['sections_pk']}
+    
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return serializers.CreateBodySeralizer
+        return serializers.BodySerializer
 
 class AuthorViewSet(ModelViewSet):
     queryset = models.Author.objects.all()
