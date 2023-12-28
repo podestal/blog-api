@@ -9,6 +9,5 @@ router.register('topics', views.TopicViewSet)
 router.register('sections', views.SectionViewSet)
 router.register('bodies', views.BodyViewSet)
 router.register('authors', views.AuthorViewSet)
-router.register('readers', views.ReaderViewSet)
 
 urlpatterns = router.urls

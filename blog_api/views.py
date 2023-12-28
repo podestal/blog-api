@@ -23,7 +23,4 @@ class AuthorViewSet(ModelViewSet):
     queryset = models.Author.objects.all()
     serializer_class = serializers.AuthorSerializer
 
-class ReaderViewSet(ModelViewSet):
-    queryset = models.Reader.objects.all()
-    serializer_class = serializers.ReaderSerializer
 

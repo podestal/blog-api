@@ -25,8 +25,3 @@ class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Author
         fields = '__all__'
-
-class ReaderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Reader
-        fields = '__all__'

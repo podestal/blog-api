@@ -17,11 +17,6 @@ class Post(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.PROTECT)
     # comment
 
-class Reader(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    job_title = models.CharField(max_length=255)
-    member_since = models.DateTimeField(auto_now=True)
-
 class Section(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="sections")
     title = models.CharField(max_length=255)
