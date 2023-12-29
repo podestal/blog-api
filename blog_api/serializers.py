@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from core.serializers import GetUserSerializer
 from . import models
 
 class TopicSerializer(serializers.ModelSerializer):
@@ -51,10 +52,20 @@ class CreatePostSerializer(serializers.ModelSerializer):
 
     def save(self, **kwargs):
         user_id = self.context['user_id']
-        return models.Post.objects.create(user_id=user_id, **self.validated_data)
+        author = models.Author.objects.get(user_id=user_id)
+        return models.Post.objects.create(author_id=author.id, **self.validated_data)
 
 
 class AuthorSerializer(serializers.ModelSerializer):
+
+    user = GetUserSerializer()
+
     class Meta:
         model = models.Author
         fields = ['id', 'job_title', 'member_since', 'user']
+
+class CreateAuthorSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Author
+        fields = ['job_title', 'user']

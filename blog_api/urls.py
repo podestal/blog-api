@@ -5,8 +5,9 @@ from . import views
 router = routers.DefaultRouter()
 
 router.register('posts', views.PostViewSet, basename='posts')
+router.register('allPosts', views.AllPostsViewSet)
 router.register('topics', views.TopicViewSet)
-router.register('authors', views.AuthorViewSet)
+router.register('authors', views.AuthorViewSet, basename='authors')
 
 sections_router = routers.NestedDefaultRouter(router, 'posts', lookup='posts')
 sections_router.register("sections", views.SectionViewSet, basename='sections')
