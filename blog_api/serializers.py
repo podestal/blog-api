@@ -46,11 +46,13 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ['id', 'created_at', 'title', 'status', 'author', 'topic', 'sections']
 
 class CreatePostSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Post
-        fields = ['title', 'topic']
+        fields = ['id', 'title', 'topic']
 
     def save(self, **kwargs):
+        print(self)
         user_id = self.context['user_id']
         author = models.Author.objects.get(user_id=user_id)
         return models.Post.objects.create(author_id=author.id, **self.validated_data)

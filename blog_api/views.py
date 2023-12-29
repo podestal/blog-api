@@ -7,6 +7,7 @@ from . import models
 from . import serializers
 
 class PostViewSet(ModelViewSet):
+
     permission_classes = [IsAuthenticated]
 
     def get_serializer_context(self):

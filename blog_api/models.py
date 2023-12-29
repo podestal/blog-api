@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from uuid import uuid4
 
 class Topic(models.Model):
     created_at = models.DateTimeField(auto_now=True)
@@ -26,6 +27,7 @@ class Post(models.Model):
         (STATUS_COMPLETED, "Completed"),
     ]
 
+    id = models.UUIDField(primary_key=True)
     created_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(Author, on_delete=models.SET_NULL, null=True, related_name="posts")
     title = models.CharField(max_length=255)
