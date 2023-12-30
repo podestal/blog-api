@@ -49,5 +49,5 @@ class Body(models.Model):
     section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name="bodies")
     image = models.CharField(max_length=255, blank=True)
     code = models.CharField(max_length=255, blank=True)
-    text = models.CharField(max_length=255, blank=True)
+    text = models.TextField(blank=True)
 

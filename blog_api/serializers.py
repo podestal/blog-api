@@ -40,6 +40,7 @@ class CreateSectionSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     sections = SectionSerializer(many=True)
+    topic = TopicSerializer()
 
     class Meta:
         model = models.Post

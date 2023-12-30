@@ -9,6 +9,7 @@ from . import serializers
 class PostViewSet(ModelViewSet):
 
     permission_classes = [IsAuthenticated]
+    http_method_names = ['get', 'post', 'patch', 'delete']
 
     def get_serializer_context(self):
         return {"user_id": self.request.user.id}
@@ -38,9 +39,10 @@ class TopicViewSet(ModelViewSet):
 class SectionViewSet(ModelViewSet):
 
     permission_classes = [IsAuthenticatedOrReadOnly]
+    http_method_names = ['get', 'post', 'patch', 'delete']
 
     def get_queryset(self):
-        return models.Section.objects.select_related("post").filter(post_id = self.kwargs['posts_id'])
+        return models.Section.objects.select_related("post").filter(post_id = self.kwargs['posts_pk'])
 
     def get_serializer_context(self):
         return {"post_id": self.kwargs['posts_pk']}
@@ -52,10 +54,12 @@ class SectionViewSet(ModelViewSet):
 
 class BodyViewSet(ModelViewSet):
 
+    queryset =  models.Body.objects.select_related('section').all()
     permission_classes = [IsAuthenticatedOrReadOnly]
+    http_method_names = ['get', 'post', 'patch', 'delete']
 
-    def get_queryset(self):
-        return models.Body.objects.select_related('section').filter(section_id = self.kwargs['sections_pk'])
+    # def get_queryset(self):
+    #     return models.Body.objects.select_related('section').filter(section_id = self.kwargs['sections_pk'])
 
     def get_serializer_context(self):
         return {"section_id": self.kwargs['sections_pk']}
@@ -68,6 +72,7 @@ class BodyViewSet(ModelViewSet):
 class AuthorViewSet(ModelViewSet):
 
     serializer_class = serializers.AuthorSerializer
+    http_method_names = ['get', 'post', 'patch', 'delete']
 
     def get_serializer_context(self):
         return {"user_id": self.request.user.id}
