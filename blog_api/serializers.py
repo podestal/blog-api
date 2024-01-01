@@ -37,10 +37,25 @@ class CreateSectionSerializer(serializers.ModelSerializer):
     def save(self, **kwargs):
         post_id = self.context['post_id']
         return models.Section.objects.create(post_id = post_id, **self.validated_data)
+    
+class AuthorSerializer(serializers.ModelSerializer):
+
+    user = GetUserSerializer()
+
+    class Meta:
+        model = models.Author
+        fields = ['id', 'job_title', 'member_since', 'user', "job"]
+
+    job = serializers.SerializerMethodField(method_name="author_title")
+
+    def author_title(self, author: models.Author):
+        print('from serializer', self.context)
+        return author.job_title
 
 class PostSerializer(serializers.ModelSerializer):
     sections = SectionSerializer(many=True)
     topic = TopicSerializer()
+    author = AuthorSerializer()
 
     class Meta:
         model = models.Post
@@ -57,15 +72,12 @@ class CreatePostSerializer(serializers.ModelSerializer):
         user_id = self.context['user_id']
         author = models.Author.objects.get(user_id=user_id)
         return models.Post.objects.create(author_id=author.id, **self.validated_data)
-
-
-class AuthorSerializer(serializers.ModelSerializer):
-
-    user = GetUserSerializer()
-
+    
+class EditPostSerializer(serializers.ModelSerializer):
+    
     class Meta:
-        model = models.Author
-        fields = ['id', 'job_title', 'member_since', 'user']
+        model = models.Post
+        fields = ['id', 'title', 'topic']
 
 class CreateAuthorSerializer(serializers.ModelSerializer):
 

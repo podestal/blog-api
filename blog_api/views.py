@@ -17,6 +17,8 @@ class PostViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return serializers.CreatePostSerializer
+        elif self.request.method == 'PATCH':
+            return serializers.EditPostSerializer
         return serializers.PostSerializer
     
     def get_queryset(self):
@@ -24,10 +26,9 @@ class PostViewSet(ModelViewSet):
         return models.Post.objects.filter(author_id = author.id)
     
 class AllPostsViewSet(ModelViewSet):
-    queryset = models.Post.objects.all()
+    queryset = models.Post.objects.filter(status='C')
     serializer_class = serializers.PostSerializer
     http_method_names = ['get']
-    # permission_classes = [RE]
 
 
 
@@ -75,6 +76,7 @@ class AuthorViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']
 
     def get_serializer_context(self):
+        # posts = models.Post.objects.filter(author_id)
         return {"user_id": self.request.user.id}
     
     def get_queryset(self):
@@ -89,6 +91,7 @@ class AuthorViewSet(ModelViewSet):
     def me(self, request):
         author = models.Author.objects.get(user_id=self.request.user.id)
         serializer = serializers.AuthorSerializer(author)
+        print(serializer.data)
         return Response(serializer.data)
     
 
